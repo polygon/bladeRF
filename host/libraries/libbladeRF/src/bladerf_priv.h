@@ -151,6 +151,9 @@ struct bladerf_fn {
     int (*init_stream)(struct bladerf_stream *stream);
     int (*stream)(struct bladerf_stream *stream, bladerf_module module);
     void (*deinit_stream)(struct bladerf_stream *stream);
+
+    int (*read_trigger)(struct bladerf *dev, bladerf_trigger trig, uint8_t *val);
+    int (*write_trigger)(struct bladerf *dev, bladerf_trigger trig, uint8_t val);
 };
 
 #define FW_LEGACY_ALT_SETTING_MAJOR 1

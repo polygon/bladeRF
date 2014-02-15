@@ -1633,6 +1633,51 @@ static int lusb_config_gpio_read(struct bladerf *dev, uint32_t *val)
     return status;
 }
 
+static int lusb_read_trigger(struct bladerf *dev, bladerf_trigger trig, uint8_t *val)
+{
+    int status = 0;
+    struct uart_cmd cmd;
+    struct bladerf_lusb *lusb = dev->backend;
+
+    *val = 0;
+    cmd.addr = trig == BLADERF_TRIGGER_RX ?
+                       UART_PKT_DEV_RX_TRIGGER_CTL : UART_PKT_DEV_TX_TRIGGER_CTL;
+    cmd.data = 0xff;
+    status = access_peripheral(
+                               lusb,
+                               UART_PKT_DEV_GPIO, UART_PKT_MODE_DIR_READ,
+                               &cmd
+                              );
+
+    if (status < 0) {
+        bladerf_set_error(&dev->error, ETYPE_LIBBLADERF, status);
+    }
+
+    return status;
+}
+
+static int lusb_write_trigger(struct bladerf *dev, bladerf_trigger trig, uint8_t val)
+{
+    int status = 0;
+    struct uart_cmd cmd;
+    struct bladerf_lusb *lusb = dev->backend;
+
+    cmd.addr = trig == BLADERF_TRIGGER_RX ?
+                       UART_PKT_DEV_RX_TRIGGER_CTL : UART_PKT_DEV_TX_TRIGGER_CTL;
+    cmd.data = val;
+    status = access_peripheral(
+                               lusb,
+                               UART_PKT_DEV_GPIO, UART_PKT_MODE_DIR_WRITE,
+                               &cmd
+                              );
+
+    if (status < 0) {
+        bladerf_set_error(&dev->error, ETYPE_LIBBLADERF, status);
+    }
+
+    return status;
+}
+
 static int lusb_si5338_write(struct bladerf *dev, uint8_t addr, uint8_t data)
 {
     int status;
