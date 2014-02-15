@@ -100,6 +100,14 @@
          type = "int";
       }
    }
+   element rx_trigger_ctl
+   {
+      datum _sortIndex
+      {
+         value = "12";
+         type = "int";
+      }
+   }
    element pio_0.s1
    {
       datum baseAddress
@@ -132,11 +140,32 @@
          type = "String";
       }
    }
+   element rx_trigger_ctl.s1
+   {
+      datum _lockedAddress
+      {
+         value = "0";
+         type = "boolean";
+      }
+      datum baseAddress
+      {
+         value = "37376";
+         type = "String";
+      }
+   }
    element timer_0.s1
    {
       datum baseAddress
       {
          value = "36864";
+         type = "String";
+      }
+   }
+   element tx_trigger_ctl.s1
+   {
+      datum baseAddress
+      {
+         value = "37408";
          type = "String";
       }
    }
@@ -156,14 +185,6 @@
          type = "int";
       }
    }
-   element spi_1.spi_control_port
-   {
-      datum baseAddress
-      {
-         value = "36960";
-         type = "String";
-      }
-   }
    element spi_0.spi_control_port
    {
       datum baseAddress
@@ -172,11 +193,27 @@
          type = "String";
       }
    }
+   element spi_1.spi_control_port
+   {
+      datum baseAddress
+      {
+         value = "36960";
+         type = "String";
+      }
+   }
    element timer_0
    {
       datum _sortIndex
       {
          value = "5";
+         type = "int";
+      }
+   }
+   element tx_trigger_ctl
+   {
+      datum _sortIndex
+      {
+         value = "13";
          type = "int";
       }
    }
@@ -233,6 +270,16 @@
  <interface
    name="oc_i2c"
    internal="bladerf_oc_i2c_master_0.conduit_end"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="rx_trigger_ctl"
+   internal="rx_trigger_ctl.external_connection"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="tx_trigger_ctl"
+   internal="tx_trigger_ctl.external_connection"
    type="conduit"
    dir="end" />
  <module kind="clock_source" version="13.1" enabled="1" name="clk_0">
@@ -356,7 +403,7 @@
   <parameter name="tightlyCoupledInstructionMaster2AddrWidth" value="1" />
   <parameter name="tightlyCoupledInstructionMaster3AddrWidth" value="1" />
   <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory2_0.s1' start='0x4000' end='0x8000' /><slave name='nios2_qsys_0.jtag_debug_module' start='0x8800' end='0x9000' /></address-map>]]></parameter>
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='iq_corr_rx_phase_gain.s1' start='0x0' end='0x10' /><slave name='onchip_memory2_0.s1' start='0x4000' end='0x8000' /><slave name='nios2_qsys_0.jtag_debug_module' start='0x8800' end='0x9000' /><slave name='timer_0.s1' start='0x9000' end='0x9040' /><slave name='pio_0.s1' start='0x9040' end='0x9060' /><slave name='spi_1.spi_control_port' start='0x9060' end='0x9080' /><slave name='uart_0.s1' start='0x9080' end='0x90A0' /><slave name='spi_0.spi_control_port' start='0x90A0' end='0x90C0' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x90C8' end='0x90D0' /><slave name='bladerf_oc_i2c_master_0.bladerf_oc_i2c_master' start='0x90E0' end='0x90E8' /><slave name='iq_corr_tx_phase_gain.s1' start='0x9100' end='0x9110' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='iq_corr_rx_phase_gain.s1' start='0x0' end='0x10' /><slave name='onchip_memory2_0.s1' start='0x4000' end='0x8000' /><slave name='nios2_qsys_0.jtag_debug_module' start='0x8800' end='0x9000' /><slave name='timer_0.s1' start='0x9000' end='0x9040' /><slave name='pio_0.s1' start='0x9040' end='0x9060' /><slave name='spi_1.spi_control_port' start='0x9060' end='0x9080' /><slave name='uart_0.s1' start='0x9080' end='0x90A0' /><slave name='spi_0.spi_control_port' start='0x90A0' end='0x90C0' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x90C8' end='0x90D0' /><slave name='bladerf_oc_i2c_master_0.bladerf_oc_i2c_master' start='0x90E0' end='0x90E8' /><slave name='iq_corr_tx_phase_gain.s1' start='0x9100' end='0x9110' /><slave name='rx_trigger_ctl.s1' start='0x9200' end='0x9220' /><slave name='tx_trigger_ctl.s1' start='0x9220' end='0x9240' /></address-map>]]></parameter>
   <parameter name="clockFrequency" value="80000000" />
   <parameter name="deviceFamilyName" value="Cyclone IV E" />
   <parameter name="internalIrqMaskSystemInfo" value="63" />
@@ -532,6 +579,42 @@
    name="bladerf_oc_i2c_master_0">
   <parameter name="ARST_LVL" value="1" />
   <parameter name="AUTO_CLOCK_SINK_CLOCK_RATE" value="80000000" />
+ </module>
+ <module
+   kind="altera_avalon_pio"
+   version="13.1"
+   enabled="1"
+   name="rx_trigger_ctl">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="true" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="direction" value="Output" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="8" />
+  <parameter name="clockRate" value="80000000" />
+ </module>
+ <module
+   kind="altera_avalon_pio"
+   version="13.1"
+   enabled="1"
+   name="tx_trigger_ctl">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="true" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="direction" value="Output" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="8" />
+  <parameter name="clockRate" value="80000000" />
  </module>
  <connection
    kind="avalon"
@@ -760,6 +843,44 @@
    end="bladerf_oc_i2c_master_0.bladerf_oc_i2c_master">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x90e0" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="clock"
+   version="13.1"
+   start="clk_0.clk"
+   end="rx_trigger_ctl.clk" />
+ <connection
+   kind="reset"
+   version="13.1"
+   start="clk_0.clk_reset"
+   end="rx_trigger_ctl.reset" />
+ <connection
+   kind="avalon"
+   version="13.1"
+   start="nios2_qsys_0.data_master"
+   end="rx_trigger_ctl.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x9200" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="clock"
+   version="13.1"
+   start="clk_0.clk"
+   end="tx_trigger_ctl.clk" />
+ <connection
+   kind="reset"
+   version="13.1"
+   start="clk_0.clk_reset"
+   end="tx_trigger_ctl.reset" />
+ <connection
+   kind="avalon"
+   version="13.1"
+   start="nios2_qsys_0.data_master"
+   end="tx_trigger_ctl.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x9220" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
