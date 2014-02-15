@@ -52,7 +52,9 @@ architecture hosted_bladerf of bladerf is
         oc_i2c_scl_pad_i    : in  std_logic;
         gpio_export         : out std_logic_vector(31 downto 0);
         correction_rx_phase_gain_export : out std_logic_vector(31 downto 0);
-        correction_tx_phase_gain_export : out std_logic_vector(31 downto 0)
+        correction_tx_phase_gain_export : out std_logic_vector(31 downto 0);
+        tx_trigger_ctl_export : out std_logic_vector(7 downto 0);
+        rx_trigger_ctl_export : out std_logic_vector(7 downto 0)
       );
     end component nios_system;
 
@@ -173,6 +175,25 @@ architecture hosted_bladerf of bladerf is
     signal correction_rx_gain  :  signed(15 downto 0);--to_signed(integer(round(real(2**Q_SCALE) * DC_OFFSET_REAL)),DC_WIDTH);
 
     constant FPGA_DC_CORRECTION :  signed(15 downto 0) := to_signed(integer(0), 16);
+    
+    -- Trigger Control interfaces
+    signal rx_trigger_ctl       : std_logic_vector(7 downto 0);
+    signal tx_trigger_ctl       : std_logic_vector(7 downto 0);
+    
+    -- Trigger Control breakdown
+    alias rx_trigger_arm        : std_logic is rx_trigger_ctl(0);
+    alias rx_trigger_fire       : std_logic is rx_trigger_ctl(1);
+    alias rx_trigger_master     : std_logic is rx_trigger_ctl(2);
+    alias rx_trigger_line       : std_logic is mini_exp1;
+
+    alias tx_trigger_arm        : std_logic is tx_trigger_ctl(0);
+    alias tx_trigger_fire       : std_logic is tx_trigger_ctl(1);
+    alias tx_trigger_master     : std_logic is tx_trigger_ctl(2);
+    alias tx_trigger_line       : std_logic is mini_exp1;
+    
+    -- Trigger Outputs
+    signal lms_rx_enable_untriggered                : std_logic;
+    signal tx_sample_fifo_rempty_untriggered        : std_logic;
 
 begin
 
@@ -287,7 +308,8 @@ begin
         wrclk               => tx_sample_fifo.wclock,
         wrreq               => tx_sample_fifo.wreq,
         q                   => tx_sample_fifo.rdata,
-        rdempty             => tx_sample_fifo.rempty,
+        --rdempty             => tx_sample_fifo.rempty,
+        rdempty             => tx_sample_fifo_rempty_untriggered,
         rdfull              => tx_sample_fifo.rfull,
         rdusedw             => tx_sample_fifo.rused,
         wrempty             => tx_sample_fifo.wempty,
@@ -431,6 +453,34 @@ begin
         phase               => correction_tx_phase,
         correction_valid    => correction_valid
       );
+      
+    -- RX Trigger
+    rxtrig : entity work.trigger(async)
+        generic map (
+            DEFAULT_OUTPUT => '0'
+        ) port map (
+            armed => rx_trigger_arm,
+            fired => rx_trigger_fire,
+            master => rx_trigger_master,
+            trigger_in => rx_trigger_line,
+            trigger_out => rx_trigger_line,
+            signal_in => lms_rx_enable_untriggered,
+            signal_out => lms_rx_enable
+        );
+        
+    -- TX Trigger
+    txtrig : entity work.trigger(async)
+        generic map (
+            DEFAULT_OUTPUT => '1'
+        ) port map (
+            armed => tx_trigger_arm,
+            fired => tx_trigger_fire,
+            master => tx_trigger_master,
+            trigger_in => tx_trigger_line,
+            trigger_out => tx_trigger_line,
+            signal_in => tx_sample_fifo_rempty_untriggered,
+            signal_out => tx_sample_fifo.rempty
+        );
 
     -- LMS6002D IQ interface
     rx_sample_i(15 downto 12) <= (others => rx_sample_i(11)) ;
@@ -564,7 +614,9 @@ begin
         oc_i2c_sda_pad_o    => i2c_sda_out,
         oc_i2c_sda_padoen_o => i2c_sda_oen,
         oc_i2c_arst_i       => '0',
-        oc_i2c_scl_pad_i    => i2c_scl_in
+        oc_i2c_scl_pad_i    => i2c_scl_in,
+        rx_trigger_ctl_export   => rx_trigger_ctl,
+        tx_trigger_ctl_export   => tx_trigger_ctl
       ) ;
 
     -- IO for NIOS
@@ -615,8 +667,8 @@ begin
 
     lms_reset               <= nios_gpio(0) ;
 
-    lms_rx_enable           <= nios_gpio(1) ;
-    lms_tx_enable           <= nios_gpio(2) ;
+    lms_rx_enable_untriggered   <= nios_gpio(1) ;
+    lms_tx_enable               <= nios_gpio(2) ;
 
     lms_tx_v                <= nios_gpio(4 downto 3) ;
     lms_rx_v                <= nios_gpio(6 downto 5) ;
@@ -628,7 +680,7 @@ begin
     exp_spi_mosi            <= '0' ;
     exp_gpio                <= (others =>'Z') ;
 
-    mini_exp1               <= 'Z';
+    --mini_exp1               <= 'Z';
     mini_exp2               <= 'Z';
 
 end architecture ; -- arch
