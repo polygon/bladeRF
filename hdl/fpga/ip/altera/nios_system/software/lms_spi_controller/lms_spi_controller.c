@@ -326,6 +326,14 @@ int main()
                             device = FPGA_VERSION_ID;
                             cmd_ptr->addr -= 12;
                             break;
+                        case 64:
+                            device = RX_TRIGGER_CTL_BASE;
+                            cmd_ptr->addr -= 64;
+                            break;
+                        case 65:
+                            device = TX_TRIGGER_CTL_BASE;
+                            cmd_ptr->addr -= 65;
+                            break;
                         default:
                             //error
                             device = PIO_0_BASE;
