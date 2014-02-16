@@ -185,7 +185,7 @@ struct bladerf {
     /* Backend's private data  */
     void *backend;
 
-    /* Driver-sppecific implementations */
+    /* Driver-specific implementations */
     const struct bladerf_fn *fn;
 
     int transfer_timeout[2];
