@@ -134,6 +134,10 @@ struct bladeRF_sector {
 #define UART_PKT_DEV_TX_PHASE_ADDR      10
 #define UART_PKT_DEV_FGPA_VERSION_ID    12
 
+// Triggering
+#define UART_PKT_DEV_RX_TRIGGER_CTL     64
+#define UART_PKT_DEV_TX_TRIGGER_CTL     65
+
 struct uart_pkt {
     unsigned char magic;
 #define UART_PKT_MAGIC          'N'
