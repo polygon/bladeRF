@@ -1075,3 +1075,16 @@ int bladerf_dac_write(struct bladerf *dev, uint16_t val)
  {
     return lms_calibrate_dc(dev, module);
  }
+
+ /*-----------------------------------------------------------------------------
+  * Trigger control routines
+  *---------------------------------------------------------------------------*/
+int bladerf_read_trigger(struct bladerf *dev, bladerf_trigger trig, uint8_t *val)
+{
+    return dev->fn->read_trigger(dev, trig, val);
+}
+
+int bladerf_write_trigger(struct bladerf *dev, bladerf_trigger trig, uint8_t val)
+{
+    return dev->fn->write_trigger(dev, trig, val);
+}
