@@ -1648,10 +1648,12 @@ static int lusb_read_trigger(struct bladerf *dev, bladerf_trigger trig, uint8_t 
                                UART_PKT_DEV_GPIO, UART_PKT_MODE_DIR_READ,
                                &cmd
                               );
-
+    
     if (status < 0) {
         bladerf_set_error(&dev->error, ETYPE_LIBBLADERF, status);
     }
+    
+    *val = cmd.data;
 
     return status;
 }
