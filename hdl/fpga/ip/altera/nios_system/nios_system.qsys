@@ -108,11 +108,32 @@
          type = "int";
       }
    }
+   element rx_trigger_ctl.s1
+   {
+      datum _lockedAddress
+      {
+         value = "0";
+         type = "boolean";
+      }
+      datum baseAddress
+      {
+         value = "37376";
+         type = "String";
+      }
+   }
    element pio_0.s1
    {
       datum baseAddress
       {
          value = "36928";
+         type = "String";
+      }
+   }
+   element timer_0.s1
+   {
+      datum baseAddress
+      {
+         value = "36864";
          type = "String";
       }
    }
@@ -132,40 +153,19 @@
          type = "String";
       }
    }
-   element uart_0.s1
-   {
-      datum baseAddress
-      {
-         value = "36992";
-         type = "String";
-      }
-   }
-   element rx_trigger_ctl.s1
-   {
-      datum _lockedAddress
-      {
-         value = "0";
-         type = "boolean";
-      }
-      datum baseAddress
-      {
-         value = "37376";
-         type = "String";
-      }
-   }
-   element timer_0.s1
-   {
-      datum baseAddress
-      {
-         value = "36864";
-         type = "String";
-      }
-   }
    element tx_trigger_ctl.s1
    {
       datum baseAddress
       {
          value = "37408";
+         type = "String";
+      }
+   }
+   element uart_0.s1
+   {
+      datum baseAddress
+      {
+         value = "36992";
          type = "String";
       }
    }
@@ -588,7 +588,7 @@
   <parameter name="bitClearingEdgeCapReg" value="false" />
   <parameter name="bitModifyingOutReg" value="true" />
   <parameter name="captureEdge" value="false" />
-  <parameter name="direction" value="Output" />
+  <parameter name="direction" value="InOut" />
   <parameter name="edgeType" value="RISING" />
   <parameter name="generateIRQ" value="false" />
   <parameter name="irqType" value="LEVEL" />
@@ -606,7 +606,7 @@
   <parameter name="bitClearingEdgeCapReg" value="false" />
   <parameter name="bitModifyingOutReg" value="true" />
   <parameter name="captureEdge" value="false" />
-  <parameter name="direction" value="Output" />
+  <parameter name="direction" value="InOut" />
   <parameter name="edgeType" value="RISING" />
   <parameter name="generateIRQ" value="false" />
   <parameter name="irqType" value="LEVEL" />

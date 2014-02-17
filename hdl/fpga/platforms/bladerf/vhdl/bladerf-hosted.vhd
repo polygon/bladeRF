@@ -53,8 +53,10 @@ architecture hosted_bladerf of bladerf is
         gpio_export         : out std_logic_vector(31 downto 0);
         correction_rx_phase_gain_export : out std_logic_vector(31 downto 0);
         correction_tx_phase_gain_export : out std_logic_vector(31 downto 0);
-        tx_trigger_ctl_export : out std_logic_vector(7 downto 0);
-        rx_trigger_ctl_export : out std_logic_vector(7 downto 0)
+        tx_trigger_ctl_in_port  : in std_logic_vector(7 downto 0);
+        tx_trigger_ctl_out_port : out std_logic_vector(7 downto 0);
+        rx_trigger_ctl_in_port  : in std_logic_vector(7 downto 0);
+        rx_trigger_ctl_out_port : out std_logic_vector(7 downto 0)
       );
     end component nios_system;
 
@@ -191,6 +193,21 @@ architecture hosted_bladerf of bladerf is
     alias tx_trigger_master     : std_logic is tx_trigger_ctl(2);
     alias tx_trigger_line       : std_logic is mini_exp1;
     
+    -- Trigger Control readback interfaces
+    signal rx_trigger_ctl_rb    : std_logic_vector(7 downto 0);
+    signal tx_trigger_ctl_rb    : std_logic_vector(7 downto 0);
+
+    -- Trigger Control readback breakdown
+    alias rx_trigger_arm_rb         : std_logic is rx_trigger_ctl_rb(0);
+    alias rx_trigger_fire_rb        : std_logic is rx_trigger_ctl_rb(1);
+    alias rx_trigger_master_rb      : std_logic is rx_trigger_ctl_rb(2);
+    alias rx_trigger_line_rb        : std_logic is rx_trigger_ctl_rb(3);
+
+    alias tx_trigger_arm_rb         : std_logic is tx_trigger_ctl_rb(0);
+    alias tx_trigger_fire_rb        : std_logic is tx_trigger_ctl_rb(1);
+    alias tx_trigger_master_rb      : std_logic is tx_trigger_ctl_rb(2);
+    alias tx_trigger_line_rb        : std_logic is tx_trigger_ctl_rb(3);
+
     -- Trigger Outputs
     signal lms_rx_enable_untriggered                : std_logic;
     signal tx_sample_fifo_rempty_untriggered        : std_logic;
@@ -468,6 +485,11 @@ begin
             signal_out => lms_rx_enable
         );
         
+    rx_trigger_arm_rb <= rx_trigger_arm;
+    rx_trigger_fire_rb <= rx_trigger_fire;
+    rx_trigger_master_rb <= rx_trigger_master;
+    rx_trigger_line_rb <= rx_trigger_line;
+        
     -- TX Trigger
     txtrig : entity work.trigger(async)
         generic map (
@@ -482,6 +504,11 @@ begin
             signal_out => tx_sample_fifo.rempty
         );
 
+    tx_trigger_arm_rb <= tx_trigger_arm;
+    tx_trigger_fire_rb <= tx_trigger_fire;
+    tx_trigger_master_rb <= tx_trigger_master;
+    tx_trigger_line_rb <= tx_trigger_line;
+        
     -- LMS6002D IQ interface
     rx_sample_i(15 downto 12) <= (others => rx_sample_i(11)) ;
     rx_sample_q(15 downto 12) <= (others => rx_sample_q(11)) ;
@@ -615,8 +642,10 @@ begin
         oc_i2c_sda_padoen_o => i2c_sda_oen,
         oc_i2c_arst_i       => '0',
         oc_i2c_scl_pad_i    => i2c_scl_in,
-        rx_trigger_ctl_export   => rx_trigger_ctl,
-        tx_trigger_ctl_export   => tx_trigger_ctl
+        rx_trigger_ctl_out_port   => rx_trigger_ctl,
+        tx_trigger_ctl_out_port   => tx_trigger_ctl,
+        rx_trigger_ctl_in_port   => rx_trigger_ctl_rb,
+        tx_trigger_ctl_in_port   => tx_trigger_ctl_rb
       ) ;
 
     -- IO for NIOS
