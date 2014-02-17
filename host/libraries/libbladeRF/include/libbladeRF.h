@@ -1691,6 +1691,18 @@ typedef enum
     BLADERF_TRIGGER_TX   /**< Transmit Trigger */
 } bladerf_trigger;
 
+/**
+ * Bit definitions for trigger control register
+ */
+static const uint8_t BLADERF_TRIGGER_ARM_BIT = (1 << 0);
+static const uint8_t BLADERF_TRIGGER_MASTER_BIT = (1 << 1);
+static const uint8_t BLADERF_TRIGGER_FIRE_BIT = (1 << 2);
+
+/**
+ * Display to dependent modules that triggering is supported
+ */
+#define BLADERF_FEATURE_TRIGGER
+
 
 /**
  * Read trigger control register
