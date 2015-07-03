@@ -108,6 +108,10 @@
 #define NIOS_PKT_8x8_TARGET_USR1    0x80
 #define NIOS_PKT_8x8_TARGET_USR128  0xff
 
+/* Rx and Tx trigger control packet identifiers */
+#define NIOS_PKT_8x8_TX_TRIGGER_CTL 0xa0
+#define NIOS_PKT_8x8_RX_TRIGGER_CTL 0xa1
+
 /* Flag bits */
 #define NIOS_PKT_8x8_FLAG_WRITE     (1 << 0)
 #define NIOS_PKT_8x8_FLAG_SUCCESS   (1 << 1)
