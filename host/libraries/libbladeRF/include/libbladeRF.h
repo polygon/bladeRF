@@ -2842,8 +2842,8 @@ int CALL_CONV bladerf_calibrate_dc(struct bladerf *dev,
  */
 typedef enum
 {
-    BLADERF_TRIGGER_RX,  /**< Receive Trigger */
-    BLADERF_TRIGGER_TX   /**< Transmit Trigger */
+    BLADERF_TRIGGER_RX,  /* Receive Trigger */
+    BLADERF_TRIGGER_TX   /* Transmit Trigger */
 } bladerf_trigger;
 
 /**
@@ -2870,7 +2870,7 @@ static const uint8_t BLADERF_TRIGGER_MASTER_BIT = (1 << 2);
  */
 API_EXPORT
 int CALL_CONV bladerf_read_trigger(struct bladerf *dev,
-                                   bladerf_trigger trig,
+                                   bladerf_trigger trigger,
                                    uint8_t *val);
 
 /**
@@ -2884,7 +2884,7 @@ int CALL_CONV bladerf_read_trigger(struct bladerf *dev,
  */
 API_EXPORT
 int CALL_CONV bladerf_write_trigger(struct bladerf *dev,
-                                    bladerf_trigger trig,
+                                    bladerf_trigger trigger,
                                     uint8_t val);
 
 /** @} (End of LOW_LEVEL) */

@@ -1758,3 +1758,20 @@ int bladerf_load_fw_from_bootloader(const char *device_identifier,
     fx3_fw_deinit(fw);
     return status;
 }
+
+/*------------------------------------------------------------------------------
+ * Trigger Control
+ *----------------------------------------------------------------------------*/
+int bladerf_read_trigger(struct bladerf *dev,
+                         bladerf_trigger trigger,
+                         uint8_t *val)
+{
+    return dev->fn->read_trigger(dev, trigger, val);
+}
+
+int bladerf_write_trigger(struct bladerf *dev,
+                          bladerf_trigger trigger,
+                          uint8_t val)
+{
+    return dev->fn->write_trigger(dev, trigger, val);
+}

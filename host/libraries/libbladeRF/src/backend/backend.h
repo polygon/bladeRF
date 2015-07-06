@@ -164,6 +164,10 @@ struct backend_fns {
     int (*load_fw_from_bootloader)(bladerf_backend backend,
                                    uint8_t bus, uint8_t addr,
                                    struct fx3_firmware *fw);
+    
+    /* Read and Write access to trigger registers */
+    int (*read_trigger)(struct bladerf *dev, bladerf_trigger trigger, uint8_t *val);
+    int (*write_trigger)(struct bladerf *dev, bladerf_trigger trigger, uint8_t val);
 };
 
 /**

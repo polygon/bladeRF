@@ -329,6 +329,18 @@ const char * module2str(bladerf_module m)
     }
 }
 
+const char * trigger2str(bladerf_trigger trigger)
+{
+    switch (trigger) {
+        case BLADERF_TRIGGER_TX:
+            return "TX";
+        case BLADERF_TRIGGER_RX:
+            return "RX";
+        default:
+            return "Unknown";
+    }
+}
+
 int str2loopback(const char *str, bladerf_loopback *loopback)
 {
     int status = 0;
