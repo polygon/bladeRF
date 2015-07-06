@@ -1183,4 +1183,7 @@ const struct backend_fns backend_fns_usb = {
     FIELD_INIT(.retune, nios_retune),
 
     FIELD_INIT(.load_fw_from_bootloader, usb_load_fw_from_bootloader),
+
+    FIELD_INIT(.read_trigger, nios_read_trigger),
+    FIELD_INIT(.write_trigger, nios_write_trigger),
 };

@@ -166,6 +166,16 @@ bladerf_log_level str2loglevel(const char *str, bool *ok);
 const char * module2str(bladerf_module m);
 
 /**
+ * Convert a trigger enumeration to a string
+ * 
+ * @note The caller should not attempt to modify or free() the returned string
+ * 
+ * @param   trigger     Trigger to convert to string
+ * @return  String representation of trigger
+ */
+const char * trigger2str(bladerf_trigger trigger);
+
+/**
  * Convert a string to a loopback mode
  *
  * @param[in]   str         String to convert

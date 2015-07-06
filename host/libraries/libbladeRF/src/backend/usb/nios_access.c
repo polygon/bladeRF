@@ -700,3 +700,36 @@ int nios_retune(struct bladerf *dev, bladerf_module module,
 
     return status;
 }
+
+int nios_read_trigger(struct bladerf *dev, bladerf_trigger trigger, uint8_t * value)
+{
+    uint8_t nios_id;
+    if (trigger == BLADERF_TRIGGER_TX)
+        nios_id = NIOS_PKT_8x8_TX_TRIGGER_CTL;
+    else
+        nios_id = NIOS_PKT_8x8_RX_TRIGGER_CTL;
+    
+    int status = nios_8x8_read(dev, nios_id, 0, value);
+    if (status == 0)
+    {
+        log_verbose("%s trigger read value %u\n", trigger2str(trigger), value);
+    }
+    return status;
+}
+
+
+int nios_write_trigger(struct bladerf *dev, bladerf_trigger trigger, uint8_t value)
+{
+    uint8_t nios_id;
+    if (trigger == BLADERF_TRIGGER_TX)
+        nios_id = NIOS_PKT_8x8_TX_TRIGGER_CTL;
+    else
+        nios_id = NIOS_PKT_8x8_RX_TRIGGER_CTL;
+    
+    int status = nios_8x8_write(dev, nios_id, 0, value);
+    if (status == 0)
+    {
+        log_verbose("%s trigger write value %u\n", trigger2str(trigger), value);
+    }
+    return status;
+}
