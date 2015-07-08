@@ -570,6 +570,83 @@ Notes:
    an SSD instead of a HDD.
 
 
+trigger
+-------
+
+Usage: `trigger [<tx | rx> [<off slave master fire stop>]]`
+
+If used without parameters, prints the current state of Rx and Tx triggers
+If used just with the target parameter, prints the state of the respective trigger
+The trigger is controlled and configured by one of the following:
+
+----------------------------------------------------------------------
+    Command Description
+----------- ----------------------------------------------------------
+`off`       Disables the trigger, clears fire request
+
+`slave`     Configures trigger as slave, clears fire request
+
+`master`    Configures trigger as master, clears fire request
+
+`fire`      Sets fire request on master trigger,
+            the whole chain will fire
+
+`stop`      Clears fire request on master trigger,
+            the whole chain will stop
+
+A trigger chain consists of a single or multiple bladeRF units and
+may contain Tx and Rx modules. If multiple bladeRF units are used
+they need to be connected via the mini_exp1 port. They should also
+share a common ground. In the case of a single bladeRF, mini_exp1
+is still used and should be left unconnected. The following sequence
+of commands should be used to ensure proper synchronization. It is
+assumed that all triggers are off in the beginning
+
+1.   Configure designated trigger master
+     - DANGER
+
+             Never configure two triggers as master on a single chain
+             You will likely cause a short circuit on mini_exp1
+             possibly damaging your BladeRF units
+
+2.   Configure all other triggers as slaves
+
+3.   Start transmitting and receiving on all radios as usual
+
+           The operation will stall until the triggers fire
+
+4.   Set fire-request on master trigger
+
+           All radios will now synchronously start transmitting
+           or receiving data
+           
+5.   Finish the transmit and receive tasks as usual
+
+6.   Clear fire-request on master trigger
+
+           Steps 3. to 6. can be repeated
+
+7.   Disable triggering on all slaves
+
+8.   Disable triggering on master
+
+Notes:
+
+ * Triggering will stall the USB requests for reading and writing
+   samples from the BladeRF. If the trigger does not fire quick
+   enough those requests will time out. Consider compiling
+   libbladeRF with LIBBLADERF_DISABLE_USB_TIMEOUTS to disable
+   timeouts altogether or with BULK_TIMEOUT_MS set to a higher
+   value.
+
+ * Synchronizing transmitters and receivers on a single chain
+   will cause an offset of 12 samples between Tx and Rx.
+   That means that the first 12 received samples will be
+   garbage. This is caused by different processing pipeline
+   lengths of Tx and Rx. This value might change if the FPGA
+   code is updated in the future.
+    
+    
 tx
 --
 
