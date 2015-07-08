@@ -2852,6 +2852,7 @@ typedef enum
 static const uint8_t BLADERF_TRIGGER_ARM_BIT = (1 << 0);
 static const uint8_t BLADERF_TRIGGER_FIRE_BIT = (1 << 1);
 static const uint8_t BLADERF_TRIGGER_MASTER_BIT = (1 << 2);
+static const uint8_t BLADERF_TRIGGER_LINE_BIT = (1 << 3);
 
 /**
  * Display to dependent modules that triggering is supported
