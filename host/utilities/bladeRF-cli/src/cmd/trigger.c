@@ -66,8 +66,8 @@ int cmd_trigger(struct cli_state *state, int argc, char **argv)
     } else if (!strcasecmp(argv[1], "rx")) {
         target = BLADERF_TRIGGER_RX;
     } else {
-        cli_err(state, "Invalid trigger target: %s\n", argv[1]);
-        goto out;
+        cli_err(state, argv[0], "Invalid trigger target: %s\n", argv[1]);
+        return CLI_RET_INVPARAM;
     }
     
     if (argc == 2)
@@ -113,8 +113,8 @@ int cmd_trigger(struct cli_state *state, int argc, char **argv)
     } else if (!strcasecmp(argv[2], "fire")) {
         if (!(armed && master))
         {
-            cli_err(state, "%s-trigger not configured as master, can't fire\n", trigger2str(target));
-            goto out;
+            cli_err(state, argv[0], "%s-trigger not configured as master, can't fire\n", trigger2str(target));
+            return CLI_RET_CMD_HANDLED;
         }
         if (fire)
         {
@@ -127,8 +127,8 @@ int cmd_trigger(struct cli_state *state, int argc, char **argv)
         printf("  Successfully set fire-request on %s-trigger\n", trigger2str(target));
     } else if (!strcasecmp(argv[2], "stop")) {
         if (!(armed && master)) {
-            cli_err(state, "%s-trigger not configured as master, can't stop fire\n", trigger2str(target));
-            goto out;
+            cli_err(state, argv[0], "%s-trigger not configured as master, can't stop fire\n", trigger2str(target));
+            return CLI_RET_CMD_HANDLED;
         }
         if (!fire) {
             printf("  WARNING: Trigger not currently firing, ignoring request\n");
@@ -139,8 +139,8 @@ int cmd_trigger(struct cli_state *state, int argc, char **argv)
             goto out;
         printf("  Successfully cleared fire-request on %s-trigger\n", trigger2str(target));
     } else {
-        cli_err(state, "Invalid trigger command: %s\n", argv[2]);
-        goto out;
+        cli_err(state, argv[0], "Invalid trigger command: %s\n", argv[2]);
+        return CLI_RET_INVPARAM;
     }
 
 out:
