@@ -32,7 +32,7 @@ int print_trigger(struct cli_state *state, bladerf_trigger target)
                 printf("   |- Fire request is set\n");
             }
         }
-        if (!linestate) {
+        if (linestate) {
             printf("   |- mini_exp1 line HIGH, trigger FIRED\n");
         } else {
             printf("   |- mini_exp1 line LOW, trigger NOT FIRED\n");
