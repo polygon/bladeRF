@@ -593,6 +593,7 @@ The trigger is controlled and configured by one of the following:
 
 `stop`      Clears fire request on master trigger,
             the whole chain will stop
+----------------------------------------------------------------------
 
 A trigger chain consists of a single or multiple bladeRF units and
 may contain Tx and Rx modules. If multiple bladeRF units are used
