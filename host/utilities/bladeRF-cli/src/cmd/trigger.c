@@ -33,9 +33,9 @@ int print_trigger(struct cli_state *state, bladerf_trigger target)
             }
         }
         if (linestate) {
-            printf("   |- mini_exp1 line HIGH, trigger FIRED\n");
+            printf("   |- mini_exp1 line HIGH, trigger NOT FIRED\n");
         } else {
-            printf("   |- mini_exp1 line LOW, trigger NOT FIRED\n");
+            printf("   |- mini_exp1 line LOW, trigger FIRED\n");
         }
     }
     return 0;
@@ -95,8 +95,8 @@ int cmd_trigger(struct cli_state *state, int argc, char **argv)
             goto out;
         printf("  %s-trigger successfully disabled\n", trigger2str(target));
     } else if (!strcasecmp(argv[2], "slave")) {
-        if (linestate)
-            printf("  WARNING: mini-exp1 line is high, trigger will fire immediately\n");
+        if (!linestate)
+            printf("  WARNING: mini-exp1 line is low, trigger will fire immediately\n");
         if (master && fire)
             printf("  WARNING: Fire-request on master was active, triggered slaves will stop\n");
         status = bladerf_write_trigger(state->dev, target, BLADERF_TRIGGER_ARM_BIT);

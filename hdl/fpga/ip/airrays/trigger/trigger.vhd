@@ -20,7 +20,7 @@ end entity;
 architecture async of trigger is
     signal triggered              : std_logic := '0';
 begin
-    triggered <= not armed or trigger_in;
+    triggered <= not armed or not trigger_in;
     signal_out <= signal_in when triggered else DEFAULT_OUTPUT;
-    trigger_out <= fired when master else 'Z';
+    trigger_out <= not fired when master else 'Z';
 end architecture;

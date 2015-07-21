@@ -13,7 +13,7 @@ architecture arch of trigger_test is
     
     signal clk                  : std_logic := '1';
     signal arm                  : std_logic := '0';
-    signal trig              : std_logic := '0';
+    signal trig              : std_logic := '1';
     signal sig                  : std_logic := '0';
     signal sigout               : std_logic := '0';
     
@@ -36,10 +36,10 @@ begin
         wait for 100ns;
         arm <= '1';
         wait for 100ns;
-        trig <= '1';
+        trig <= '0';
         wait for 100ns;
         arm <= '0';
         wait for 100ns;
-        trig <= '0';
+        trig <= '1';
     end process;
 end architecture;
