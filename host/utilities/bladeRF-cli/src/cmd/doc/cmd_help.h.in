@@ -695,6 +695,8 @@
   "  -----------------------------------------------------------------------\n" \
   "\n" \
 
+#define CLI_CMD_HELPTEXT_trigger \
+  "Usage: trigger tx\n" \
 
 #define CLI_CMD_HELPTEXT_version \
   "Usage: version\n" \
